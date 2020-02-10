@@ -15,7 +15,7 @@ namespace XMLGenerator
             int weeks;
             int daysPerWeek;
             int total_days;
-            List<Day> Days = new List<Day>();
+            List<TimeSlot> timeSlots = new List<TimeSlot>();
             TimeTable Output = new TimeTable();
 
         start:
@@ -53,56 +53,39 @@ namespace XMLGenerator
                 goto daysPerWeek_input;
             }
             */
-            daysPerWeek = 7;
-            Output.daysPerWeek = daysPerWeek;
 
-            total_days = daysPerWeek * weeks;
+            Console.WriteLine("Total slots.");
+            int totalSlots = Convert.ToInt32(Console.ReadLine());
 
-            for (int i = 0; i < total_days; i++)
+            for (int j = 0; j < totalSlots; j++)
             {
-                Day newDay = new Day();
+                TimeSlot newtimeSlot = new TimeSlot();
                 Console.WriteLine();
-                Console.WriteLine("Day " + Convert.ToString(i+1));
-                Console.WriteLine("Name for day:");
-                string temp = Console.ReadLine();
-                newDay.name = temp;
+                Console.WriteLine("Timeslot " + Convert.ToString(j + 1));
+                Console.WriteLine("Name of this timeslot:");
+                string temp2 = Console.ReadLine();
+                newtimeSlot.name = temp2;
+                Console.WriteLine("Location of this timeslot:");
+                string temp3 = Console.ReadLine();
+                newtimeSlot.room = temp3;
+                Console.WriteLine("Start hour of this timeslot:");
+                int temp4 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Start minute of this timeslot:");
+                int temp5 = Convert.ToInt32(Console.ReadLine());
+                DateTime temp6 = new DateTime(1, 1, 1, temp4, temp5, 0);
+                newtimeSlot.Start = temp6;
 
-                Console.WriteLine("How many timeslots:");
-                int TimeSlots = Convert.ToInt32(Console.ReadLine());
-                List<TimeSlot> newTimeslots = new List<TimeSlot>();
-                for (int j = 0; j < TimeSlots; j++)
-                {
-                    TimeSlot newtimeSlot = new TimeSlot();
-                    Console.WriteLine();
-                    Console.WriteLine("Timeslot " + Convert.ToString(j+1));
-                    Console.WriteLine("Name of this timeslot:");
-                    string temp2 = Console.ReadLine();
-                    newtimeSlot.name = temp2;
-                    Console.WriteLine("Location of this timeslot:");
-                    string temp3 = Console.ReadLine();
-                    newtimeSlot.room = temp3;
-                    Console.WriteLine("Start hour of this timeslot:");
-                    int temp4 = Convert.ToInt32(Console.ReadLine());
-                    Console.WriteLine("Start minute of this timeslot:");
-                    int temp5 = Convert.ToInt32(Console.ReadLine());
-                    DateTime temp6 = new DateTime(1, 1, 1, temp4, temp5, 0);
-                    newtimeSlot.Start = temp6;
+                Console.WriteLine("End hour of this timeslot:");
+                int temp7 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("End minute of this timeslot:");
+                int temp8 = Convert.ToInt32(Console.ReadLine());
+                DateTime temp9 = new DateTime(1, 1, 1, temp7, temp8, 0);
+                newtimeSlot.End = temp9;
 
-                    Console.WriteLine("End hour of this timeslot:");
-                    int temp7 = Convert.ToInt32(Console.ReadLine());
-                    Console.WriteLine("End minute of this timeslot:");
-                    int temp8 = Convert.ToInt32(Console.ReadLine());
-                    DateTime temp9 = new DateTime(1, 1, 1, temp7, temp8, 0);
-                    newtimeSlot.End = temp9;
-
-                    newTimeslots.Add(newtimeSlot);
-                }
-
-                newDay.TimeSlots = newTimeslots;
-                Days.Add(newDay);
+                timeSlots.Add(newtimeSlot);
             }
 
-            Output.days = Days;
+            Output.timeSlots = timeSlots;
 
             Console.WriteLine();
             Console.WriteLine("Current data is:");

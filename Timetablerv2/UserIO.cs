@@ -1,24 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections.Generic;
 
-namespace XMLGenerator
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace Timetablerv2
 {
-	class UserIO
-	{
-		private const string SavePath = "Saves";
-		private const string BackupPath = "Backups";
+    class UserIO
+    {
 		private const string Extension = ".xml";
+		public static string root;
+
 		private static string GetHandle(string name)
 		{
-			return Path.Combine(SavePath, name + Extension);
+			
+			return Path.Combine(root, name + Extension);
 		}
 
 		private static string GetBackupHandle(string name)
 		{
-			return Path.Combine(BackupPath, name + Extension);
+			return Path.Combine(root, name + Extension);
 		}
 		public static bool Save<T>(string path, byte[] data) where T : class
 		{
@@ -73,6 +84,10 @@ namespace XMLGenerator
 						result = UserIO.Deserialise<T>(fileStream);
 					}
 				}
+				else
+				{
+					throw new System.IO.FileNotFoundException("File not found");
+				}
 			}
 			catch (Exception ex)
 			{
@@ -126,25 +141,9 @@ namespace XMLGenerator
 			return result;
 		}
 
-		public static void SaveTimeTable(TimeTable Table)
+		public static TimeTable LoadStorage(string name)
 		{
-			UserIO.Save<TimeTable>("TimeTable.xml", UserIO.Serialise<TimeTable>(Table));
+			return UserIO.Load<TimeTable>(name);
 		}
-	}
-
-	public class TimeTable
-	{
-		public List<TimeSlot> timeSlots;
-		public int weeks; //number of weeks for cycling
-		public List<int> CounterStart;
-		public List<int> CounterEnd;
-	}
-
-	public class TimeSlot
-	{
-		public string name;
-		public string room;
-		public DateTime Start;
-		public DateTime End;
 	}
 }
