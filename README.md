@@ -9,3 +9,11 @@ Then copy the xml file from XMLGenerator/bin/Debug/Saves/Timetable.xml to your p
 Copy the xml file to /Android/data/com.timetabler.timetabler/files/ (may have to run the app once to generate folder)
 
 Launch app. Should just work.
+
+# Building
+
+Requirements: Android SDK, Xamarin
+
+To build the old version, download the source code from the v1.0 release and compile the Timetabler project.
+
+To build the current version, clone the repository or download the v2.0 release code and compile the Timetabler**v2** project.
