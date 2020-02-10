@@ -13,8 +13,6 @@ namespace XMLGenerator
         public static int Main()
         {
             int weeks;
-            int daysPerWeek;
-            int total_days;
             List<TimeSlot> timeSlots = new List<TimeSlot>();
             TimeTable Output = new TimeTable();
 
@@ -30,29 +28,15 @@ namespace XMLGenerator
             }
             Output.weeks = weeks;
 
-        counter_start:
             Console.WriteLine();
             Console.WriteLine("Comma separated list of day of year for starting counters.");
             Console.WriteLine("This means the first day of term.");
             Output.CounterStart = Console.ReadLine().Split(",".ToCharArray()).ToList().ConvertAll<int>(Convert.ToInt32);
 
-        counter_end:
             Console.WriteLine();
             Console.WriteLine("Comma separated list of day of year for ending counters.");
             Console.WriteLine("This means the last day of term.");
             Output.CounterEnd = Console.ReadLine().Split(",".ToCharArray()).ToList().ConvertAll<int>(Convert.ToInt32);
-
-        daysPerWeek_input:
-            /*
-            Console.WriteLine();
-            Console.WriteLine("How many school days per week (1-7):");
-            daysPerWeek = Convert.ToInt32(Console.ReadLine());
-            if (!(1 <= daysPerWeek && daysPerWeek <= 7))
-            {
-                Console.WriteLine("Must be between 1 and 7 school days per week.");
-                goto daysPerWeek_input;
-            }
-            */
 
             Console.WriteLine("Total slots.");
             int totalSlots = Convert.ToInt32(Console.ReadLine());
@@ -62,6 +46,8 @@ namespace XMLGenerator
                 TimeSlot newtimeSlot = new TimeSlot();
                 Console.WriteLine();
                 Console.WriteLine("Timeslot " + Convert.ToString(j + 1));
+                Console.WriteLine("Day number:");
+                int dayNumber = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Name of this timeslot:");
                 string temp2 = Console.ReadLine();
                 newtimeSlot.name = temp2;
@@ -79,7 +65,7 @@ namespace XMLGenerator
                 int temp7 = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("End minute of this timeslot:");
                 int temp8 = Convert.ToInt32(Console.ReadLine());
-                DateTime temp9 = new DateTime(1, 1, 1, temp7, temp8, 0);
+                DateTime temp9 = new DateTime(1, 1, dayNumber, temp7, temp8, 0);
                 newtimeSlot.End = temp9;
 
                 timeSlots.Add(newtimeSlot);
@@ -99,9 +85,9 @@ namespace XMLGenerator
                 goto start;
             }
 
-            UserIO.Save<TimeTable>("Timetable", UserIO.Serialise<TimeTable>(Output));
-
             //write timetable to file now
+
+            UserIO.Save<TimeTable>("Timetable", UserIO.Serialise<TimeTable>(Output));
 
             return 0;
         }
