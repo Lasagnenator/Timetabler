@@ -141,8 +141,8 @@ namespace Timetablerv2
             string NextName = "None";
             string NextRoom = "None";
 
-            Current = Utils.GetCurrentTimeSlot(Database.timeSlots);
-            Next = Utils.GetNextTimeSlot(Database.timeSlots);
+            Current = Utils.GetCurrentTimeSlot(Database);
+            Next = Utils.GetNextTimeSlot(Database);
             
             if (Next != null)
             {

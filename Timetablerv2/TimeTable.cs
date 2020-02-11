@@ -49,15 +49,23 @@ namespace Timetablerv2
         }
 
         //Returns null if none are current
-        public static TimeSlot GetCurrentTimeSlot(List<TimeSlot> TimeSlots)
+        public static TimeSlot GetCurrentTimeSlot(TimeTable Database)
         {
+            List<TimeSlot> TimeSlots = Database.timeSlots;
             TimeSlot Current = null;
+            DateTime Now = DateTime.Now;
+            TimeSpan Delta = GetStartDateTimeSpan(Database);
 
             foreach (var item in TimeSlots)
             {
                 DateTime Start = item.Start;
                 DateTime End = item.End;
-                DateTime Now = DateTime.Now;
+                
+                Start += Delta;
+                Start = Start.AddYears(Now.Year - 1);
+                End += Delta;
+                End = End.AddYears(Now.Year - 1);
+                /*
                 Start = Start.AddYears(Now.Year-1);
                 Start = Start.AddMonths(Now.Month-1);
                 Start = Start.AddDays(Now.Day-1);
@@ -65,6 +73,7 @@ namespace Timetablerv2
                 End = End.AddYears(Now.Year-1);
                 End = End.AddMonths(Now.Month-1);
                 End = End.AddDays(Now.Day-1);
+                */
 
                 if ((DateTime.Compare(Start, Now)<0) && (DateTime.Compare(Now, End)<0))
                 {
@@ -76,9 +85,34 @@ namespace Timetablerv2
             return Current;
         }
 
-        public static TimeSlot GetNextTimeSlot(List<TimeSlot> TimeSlots)
+        public static TimeSpan GetStartDateTimeSpan(TimeTable Database)
         {
-            TimeSlot Current = GetCurrentTimeSlot(TimeSlots);
+            int ThisDay = DateTime.Now.DayOfYear;
+            int term_start = 0;
+
+            for (int i = 0; i < Database.CounterStart.Count; i++)
+            {
+                if ((ThisDay >= Database.CounterStart[i]) && (ThisDay <= Database.CounterEnd[i]))
+                {
+                    term_start = Database.CounterStart[i];
+                    break;
+                }
+            }
+
+            if (term_start == 0)
+            {
+                return new TimeSpan(0);
+            }
+
+            int DayIndex = (ThisDay - term_start) % (Database.weeks * 7); //which day within the week it is
+            int Delta = DateTime.Now.DayOfYear - DayIndex; //What day of year is the preivous start of cycle
+            return new TimeSpan(Delta-1, 0,0,0);
+        }
+
+        public static TimeSlot GetNextTimeSlot(TimeTable Database)
+        {
+            List<TimeSlot> TimeSlots = Database.timeSlots;
+            TimeSlot Current = GetCurrentTimeSlot(Database);
             if (Current == null) { return null; }
             int NextIndex = TimeSlots.IndexOf(Current);
             if (NextIndex+1 >= TimeSlots.Count) { return null; }
