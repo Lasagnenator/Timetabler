@@ -119,23 +119,25 @@ namespace Timetablerv2
             return TimeSlots[NextIndex+1];
         }
 
-        public static int MinutesTillNext(TimeSlot Next)
+        public static int MinutesTillNext(TimeSlot Next, TimeSpan Delta)
         {
             DateTime temp = Next.Start;
+            temp += Delta;
             temp = temp.AddYears(DateTime.Now.Year - 1);
-            temp = temp.AddDays(DateTime.Now.Day-1);
-            temp = temp.AddMonths(DateTime.Now.Month-1);
+            //temp = temp.AddDays(DateTime.Now.Day-1);
+            //temp = temp.AddMonths(DateTime.Now.Month-1);
             TimeSpan diff = temp.Subtract(DateTime.Now);
             return Convert.ToInt32(diff.TotalMinutes);
         }
 
-        public static double CurrentProgress(TimeSlot Current)
+        public static double CurrentProgress(TimeSlot Current, TimeSpan Delta)
         {
             double Length = Current.End.Subtract(Current.Start).TotalSeconds;
             DateTime temp = Current.Start;
+            temp += Delta;
             temp = temp.AddYears(DateTime.Now.Year-1);
-            temp = temp.AddMonths(DateTime.Now.Month-1);
-            temp = temp.AddDays(DateTime.Now.Day-1);
+            //temp = temp.AddMonths(DateTime.Now.Month-1);
+            //temp = temp.AddDays(DateTime.Now.Day-1);
             double NowStartDiff = DateTime.Now.Subtract(temp).TotalSeconds;
             return NowStartDiff / Length;
         }

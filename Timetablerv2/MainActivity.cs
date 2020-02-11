@@ -146,13 +146,13 @@ namespace Timetablerv2
             
             if (Next != null)
             {
-                MinutesTillNext = Utils.MinutesTillNext(Next).ToString() + " mins";
+                MinutesTillNext = Utils.MinutesTillNext(Next, Utils.GetStartDateTimeSpan(Database)).ToString() + " mins";
                 NextName = Next.name;
                 NextRoom = Next.room;
             }
             if (Current != null) 
             {
-                CurrentProgress = Utils.CurrentProgress(Current) *100.0;
+                CurrentProgress = Utils.CurrentProgress(Current, Utils.GetStartDateTimeSpan(Database)) * 100.0;
                 CurrentName = Current.name;
                 CurrentRoom = Current.room;
             }
